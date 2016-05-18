@@ -2764,19 +2764,21 @@ package diesel {
             tpl : (Option[Rsrc], Option[CnxnCtxtLabel[String,String,String]], Option[acT.AgentCnxn])
           ) : Rsrc = {
             val ( optRsrc, optFilter, optCnxn ) = tpl
+            val fltr = optFilter.getOrElse(ConcreteHL.Bottom)
+            val cnxn = optCnxn.getOrElse(ConcreteHL.Bottom)
             mTT.Ground(
               optRsrc match {
                 case None => {                                                
                   ConcreteHL.Bottom
                 }
                 case Some( mTT.Ground( v ) ) => {                
-                  ConcreteHL.PostedExpr((v, optFilter.get, optCnxn.get, mTT.RBoundAList(None,None)))
+                  ConcreteHL.PostedExpr((v, fltr, cnxn, mTT.RBoundAList(None,None)))
                 }
                 case Some( mTT.RBoundHM( Some( mTT.Ground( v ) ), bindings ) ) => {                
-                  ConcreteHL.PostedExpr((v, optFilter.get, optCnxn.get, mTT.RBoundAList(None, bindings.map(_.toList))))
+                  ConcreteHL.PostedExpr((v, fltr, cnxn, mTT.RBoundAList(None, bindings.map(_.toList))))
                 }
                 case Some( mTT.RBoundAList( Some( mTT.Ground( v ) ), bindings ) ) => {                
-                  ConcreteHL.PostedExpr((v, optFilter.get, optCnxn.get, mTT.RBoundAList(None, bindings)))
+                  ConcreteHL.PostedExpr((v, fltr, cnxn, mTT.RBoundAList(None, bindings)))
                 }
               }
             )
@@ -3247,7 +3249,7 @@ package diesel {
                   val runProcRsp = ConcreteHL.RunProcessResponse( -1, Nil, Nil )
                   onExecution(
                     Some(
-                      tplToRsrc( ( Some( mTT.Ground( runProcRsp ) ), None, None )  )
+                      tplToRsrc( ( Some( mTT.Ground( runProcRsp ) ), None, None )  )   //@@GS - fails due to use of Option.get in recipient
                     )
                   )
                 }
