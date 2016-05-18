@@ -3249,7 +3249,7 @@ package diesel {
                   val runProcRsp = ConcreteHL.RunProcessResponse( -1, Nil, Nil )
                   onExecution(
                     Some(
-                      tplToRsrc( ( Some( mTT.Ground( runProcRsp ) ), None, None )  )   //@@GS - fails due to use of Option.get in recipient
+                      tplToRsrc( ( Some( mTT.Ground( runProcRsp ) ), None, None )  )
                     )
                   )
                 }
